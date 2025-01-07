@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Board</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            margin: 20px;
+        }
+        .board {
+            display: flex;
+            gap: 20px;
+        }
+        .column {
+            width: 250px;
+            background: #f4f4f4;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        .column h2 {
+            text-align: center;
+        }
+        .task {
+            background: #e0e0e0;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 3px;
+            cursor: grab;
+        }
+        .form-container {
+            margin-top: 20px;
+        }
+        input, select, button {
+            margin: 5px 0;
+            padding: 5px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="board">
+        {% for column, tasks in board.items() %}
+        <div class="column">
+            <h2>{{ column }}</h2>
+            <div>
+                {% for task in tasks %}
+                <div class="task">{{ task }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="form-container">
+        <form action="/add_task" method="post">
+            <h3>Add Task</h3>
+            <input type="text" name="task" placeholder="Task Name" required>
+            <select name="column">
+                {% for column in board.keys() %}
+                <option value="{{ column }}">{{ column }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Add Task</button>
+        </form>
+        <form action="/move_task" method="post">
+            <h3>Move Task</h3>
+            <input type="text" name="task" placeholder="Task Name" required>
+            <select name="from_column">
+                {% for column in board.keys() %}
+                <option value="{{ column }}">{{ column }}</option>
+                {% endfor %}
+            </select>
+            <select name="to_column">
+                {% for column in board.keys() %}
+                <option value="{{ column }}">{{ column }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Move Task</button>
+        </form>
+    </div>
+</body>
+</html>
